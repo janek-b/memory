@@ -1,38 +1,38 @@
-
-
+var Memory = require('../js/memory.js').memoryModule;
 
 $(function() {
-  var words = ["tony", "tony", "todd", "todd", "janet", "janet", "megan", "megan", "alfred", "alfred"];
-  var hiddenArray = [];
-  for (var i = 1; i < 11; i++) {
-    hiddenArray.push("hidden")
-  }
+  var hiddenImg = "http://media-hearth.cursecdn.com/attachments/39/684/cardback_20.png";
+  var memoryGame = new Memory();
+  var cards = memoryGame.getCards(5);
 
+  var insertImg = function(src) {
+    return "<img src='"+src+"'/>"
+  }
 
   var clicks = [];
   var reveal = function(index) {
     if (clicks.length < 1) {
       clicks.push(index)
-      $("#card"+(index)).text(words[index]);
+      $("#card"+(index)).html(insertImg(cards[index]));
     } else {
-      if (words[clicks[0]] === words[index]) {
-        $("#card"+(index)).text(words[index]);
+      if (cards[clicks[0]] === cards[index]) {
+        $("#card"+(index)).html(insertImg(cards[index]));
         $("#card"+(index)).off("click");
         $("#card"+(clicks[0])).off("click");
         clicks = [];
       } else {
-        $("#card"+(index)).text(words[index]);
+        $("#card"+(index)).html(insertImg(cards[index]));
         var reset = setTimeout(function() {
-          $("#card"+(index)).text("hidden");
-          $("#card"+(clicks[0])).text("hidden");
+          $("#card"+(index)).html(insertImg(hiddenImg));
+          $("#card"+(clicks[0])).html(insertImg(hiddenImg));
           clicks = [];
         }, 1000);
       }
     }
   }
 
-  for (var i = 0; i < hiddenArray.length; i++) {
-    $("#card"+i).text(hiddenArray[i]);
+  for (var i = 0; i < cards.length; i++) {
+    $("#card"+i).html(insertImg(hiddenImg));
     $("#card"+i).attr("data-index", i);
     $("#card"+i).click(function() {
       reveal($(this).attr("data-index"))
