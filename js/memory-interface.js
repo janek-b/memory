@@ -9,16 +9,24 @@ $(function() {
     return "<img src='"+src+"'/>"
   }
 
+  var correctGuesses = 0;
   var clicks = [];
   var reveal = function(index) {
-    if (clicks.length < 1) {
+    if (clicks.length === 0) {
       clicks.push(index)
       $("#card"+(index)).html(insertImg(cards[index]));
-    } else {
+    } else if (clicks.length === 1) {
+      clicks.push(index)
       if (cards[clicks[0]] === cards[index]) {
         $("#card"+(index)).html(insertImg(cards[index]));
         $("#card"+(index)).off("click");
         $("#card"+(clicks[0])).off("click");
+        correctGuesses += 2;
+        if (correctGuesses === cards.length) {
+          var won = setTimeout(function() {
+            alert("you WOn");
+          }, 100)
+        }
         clicks = [];
       } else {
         $("#card"+(index)).html(insertImg(cards[index]));
@@ -29,6 +37,7 @@ $(function() {
         }, 1000);
       }
     }
+
   }
 
   for (var i = 0; i < cards.length; i++) {
